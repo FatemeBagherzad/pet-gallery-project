@@ -39,12 +39,31 @@ let images = [];
 const apiKey =
   'live_kT9IUM097S8mkNWl8OxZ4onGT2LTWhVh78WXjCTZE5mRBR5Fu1LCjw9i1zDlDThR';
 
+// const getPetImgs = () => {
+//   axios
+//     .get('https://api.thedogapi.com/v1/images/search?limit=10')
+//     .then((response) => {
+//       console.log(response.data);
+//       images = response.data;
+//       showGallery();
+//     })
+//     .catch((err) => {
+//       console.log('Error happened during fetching!', err);
+//     });
+// };
+// getPetImgs();
+
+//-------------------------------
 const getPetImgs = () => {
-  axios
-    .get('https://api.thedogapi.com/v1/images/search?limit=10')
+  return axios
+    .all([
+      axios.get('https://api.thedogapi.com/v1/images/search?limit=10'),
+      axios.get('https://api.thecatapi.com/v1/images/search?limit=10'),
+    ])
+
     .then((response) => {
-      console.log(response.data);
-      images = response.data;
+      images = response[0].data;
+      images = images.concat(response[1].data);
       showGallery();
     })
     .catch((err) => {
